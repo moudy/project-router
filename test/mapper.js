@@ -36,7 +36,7 @@ describe('Mapper', function () {
 
   describe('.route()', function () {
     var router = mapRoutes(function () {
-      this.route('get', '/users', 'users/index');
+      this.route({method: 'get', routePath: '/users', filePath: 'users/index'});
     });
 
     it('creates routes', function () {
@@ -45,6 +45,18 @@ describe('Mapper', function () {
       expect(route.methods.get).to.be.true;
     });
 
+  });
+
+  describe('.namespace()', function () {
+    var router = mapRoutes(function () {
+      this.namespace('api', function () { this.get('/users', 'users/index'); });
+    });
+
+    it('routes', function () {
+      var route = router.stack[0].route;
+      expect(route.path).to.eq('/api/users');
+      expect(route.methods.get).to.be.true;
+    });
   });
 
   context('.resource()', function () {
@@ -89,6 +101,43 @@ describe('Mapper', function () {
         test(_.omit(usersResoureRoutes, except), router.stack, true);
         test(_.pick(usersResoureRoutes, except), router.stack, false);
       });
+    });
+
+    describe('(name, fn)', function () {
+      var router = mapRoutes(function () {
+        this.resources('users', function () {
+          this.resources('posts', function () {
+            this.resources('comments');
+          });
+        });
+      });
+
+      it('creates nested resources', function () {
+        var routes = router.stack.map(function (s) { return s.route.path; });
+        expect(routes).to.include.members([
+          '/users',
+          '/users/new',
+          '/users',
+          '/users/:id',
+          '/users/:id/edit',
+          '/users/:id',
+          '/users/:id',
+          '/users/:userId/posts',
+          '/users/:userId/posts/new',
+          '/users/:userId/posts',
+          '/users/:userId/posts/:id',
+          '/users/:userId/posts/:id/edit',
+          '/users/:userId/posts/:id',
+          '/users/:userId/posts/:id',
+          '/users/:userId/posts/:postId/comments',
+          '/users/:userId/posts/:postId/comments/new',
+          '/users/:userId/posts/:postId/comments',
+          '/users/:userId/posts/:postId/comments/:id',
+          '/users/:userId/posts/:postId/comments/:id/edit',
+          '/users/:userId/posts/:postId/comments/:id'
+         ]);
+      });
+
     });
   });
 

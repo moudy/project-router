@@ -18,7 +18,7 @@ describe('index', function () {
   });
 
   context('.map()', function () {
-    var DEFAULT_ROUTES_PATH = ProjectRouter.DEFAULT_ROUTES_PATH;
+    var DEFAULT_ROUTES_PATH = ProjectRouter.Mapper.prototype.DEFAULT_ROUTES_PATH;
 
     it('returns express router', function () {
       expect(ProjectRouter.map(function () {}).handle).to.be.a('function');
