@@ -1,0 +1,97 @@
+var _ = require('underscore');
+var expect = require('chai').expect;
+var express = require('express');
+
+var Mapper = require('../lib/mapper');
+
+var usersResoureRoutes = {
+  index: { path: '/users', type: 'get'}
+, show: { path: '/users/:id', type: 'get'}
+, new: { path: '/users/new', type: 'get'}
+, edit: { path: '/users/:id/edit', type: 'get'}
+, create: { path: '/users', type: 'post'}
+, update: { path: '/users/:id', type: 'put'}
+, destroy: { path: '/users/:id', type: 'delete'}
+};
+
+describe('Mapper', function () {
+  function mapRoutes (fn) {
+    var router = express.Router();
+    var mapper = new Mapper(router, {routesPath: 'test/routes'});
+    fn.call(mapper);
+
+    return router;
+  }
+
+  describe('.VERB()', function () {
+    var router = mapRoutes(function () {});
+    var HTTP_VERBS = [ 'get', 'post', 'put', 'delete' ];
+
+    it('has http verb convenience methods', function () {
+      HTTP_VERBS.forEach(function (VERB) {
+        expect(router[VERB]).to.be.a('function');
+      });
+    });
+  });
+
+  describe('.route()', function () {
+    var router = mapRoutes(function () {
+      this.route('get', '/users', 'users/index');
+    });
+
+    it('creates routes', function () {
+      var route = router.stack[0].route;
+      expect(route.path).to.eq('/users');
+      expect(route.methods.get).to.be.true;
+    });
+
+  });
+
+  context('.resource()', function () {
+
+    function test (routes, stack, shouldExist)  {
+      _.each(routes, function test (routeInfo) {
+        var route = _.find(stack, function (s) {
+          return s.route.path === routeInfo.path && s.route.methods[routeInfo.type];
+        });
+
+        if (shouldExist) {
+          expect(route).to.exist;
+        } else {
+          expect(route).to.not.exist;
+        }
+      });
+    }
+
+    describe('(name)', function () {
+      var router = mapRoutes(function () { this.resources('users'); });
+
+      it('creates resources routes', function () {
+        test(usersResoureRoutes, router.stack, true);
+      });
+    });
+
+    describe('(name, {only: [...])', function () {
+      var only = ['index', 'show'];
+      var router = mapRoutes(function () { this.resources('users', {only: only}); });
+
+      it('creates only index and show resources routes', function () {
+        test(_.pick(usersResoureRoutes, only), router.stack, true);
+        test(_.omit(usersResoureRoutes, only), router.stack, false);
+      });
+    });
+
+    describe('(name, {except: [...])', function () {
+      var except = ['destroy'];
+      var router = mapRoutes(function () { this.resources('users', {except: except}); });
+
+      it('creates all resources routes except delete', function () {
+        test(_.omit(usersResoureRoutes, except), router.stack, true);
+        test(_.pick(usersResoureRoutes, except), router.stack, false);
+      });
+    });
+  });
+
+
+
+});
