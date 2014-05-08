@@ -139,6 +139,39 @@ describe('Mapper', function () {
       });
 
     });
+
+    describe('resources.member', function () {
+      var router = mapRoutes(function () {
+        this.resources('users', {only: 'show'}, function () {
+          this.resources('posts', {only: 'show'}, function () {
+            this.member.get('/wtf');
+          });
+        });
+      });
+
+      it('sets a member route', function () {
+        var routes = router.stack.map(function (s) { return s.route.path; });
+        var expected = '/users/:userId/posts/:id/wtf';
+        expect(routes).to.include.members([ expected ]);
+      });
+    });
+
+    describe('resources.collection', function () {
+      var router = mapRoutes(function () {
+        this.resources('users', {only: 'show'}, function () {
+          this.resources('posts', {only: 'show'}, function () {
+            this.collection.get('/wtf');
+          });
+        });
+      });
+
+      it('sets a collection route route', function () {
+        var routes = router.stack.map(function (s) { return s.route.path; });
+        var expected = '/users/:userId/posts/wtf';
+        expect(routes).to.include.members([ expected ]);
+      });
+    });
+
   });
 
 
