@@ -76,7 +76,7 @@ describe('Mapper', function () {
     }
 
     describe('(name)', function () {
-      var router = mapRoutes(function () { this.resources('users'); });
+      var router = mapRoutes(function () { this.resource('users'); });
 
       it('creates resources routes', function () {
         test(usersResoureRoutes, router.stack, true);
@@ -85,7 +85,7 @@ describe('Mapper', function () {
 
     describe('(name, {only: [...])', function () {
       var only = ['index', 'show'];
-      var router = mapRoutes(function () { this.resources('users', {only: only}); });
+      var router = mapRoutes(function () { this.resource('users', {only: only}); });
 
       it('creates only index and show resources routes', function () {
         test(_.pick(usersResoureRoutes, only), router.stack, true);
@@ -95,7 +95,7 @@ describe('Mapper', function () {
 
     describe('(name, {except: [...])', function () {
       var except = ['destroy'];
-      var router = mapRoutes(function () { this.resources('users', {except: except}); });
+      var router = mapRoutes(function () { this.resource('users', {except: except}); });
 
       it('creates all resources routes except delete', function () {
         test(_.omit(usersResoureRoutes, except), router.stack, true);
@@ -105,9 +105,9 @@ describe('Mapper', function () {
 
     describe('(name, fn)', function () {
       var router = mapRoutes(function () {
-        this.resources('users', function () {
-          this.resources('posts', function () {
-            this.resources('comments');
+        this.resource('users', function () {
+          this.resource('posts', function () {
+            this.resource('comments');
           });
         });
       });
@@ -142,8 +142,8 @@ describe('Mapper', function () {
 
     describe('resources.member', function () {
       var router = mapRoutes(function () {
-        this.resources('users', {only: 'show'}, function () {
-          this.resources('posts', {only: 'show'}, function () {
+        this.resource('users', {only: 'show'}, function () {
+          this.resource('posts', {only: 'show'}, function () {
             this.member.get('/wtf');
           });
         });
@@ -158,8 +158,8 @@ describe('Mapper', function () {
 
     describe('resources.collection', function () {
       var router = mapRoutes(function () {
-        this.resources('users', {only: 'show'}, function () {
-          this.resources('posts', {only: 'show'}, function () {
+        this.resource('users', {only: 'show'}, function () {
+          this.resource('posts', {only: 'show'}, function () {
             this.collection.get('/wtf');
           });
         });
