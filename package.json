@@ -1,5 +1,6 @@
 {
   "name": "project-router",
+  "description": "Promise based routing for Express apps",
   "version": "0.0.3",
   "scripts": {
     "test": "mocha"
