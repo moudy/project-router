@@ -12,10 +12,11 @@
     "lingo": "0.0.5"
   },
   "devDependencies": {
-    "supertest": "^0.10.0",
     "chai": "^1.9.1",
+    "ejs": "^1.0.0",
     "mocha": "^1.18.2",
     "sinon": "^1.9.1",
+    "supertest": "^0.10.0",
     "underscore": "^1.6.0"
   },
   "engines": {
