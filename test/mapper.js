@@ -148,9 +148,10 @@ describe('Mapper', function () {
     }
 
     describe('resources.member', function () {
+      var Post = {find: 'find'};
       var router = mapRoutes(function () {
         this.resource('users', {only: 'show'}, function () {
-          this.resource('posts', {only: 'show'}, function () {
+          this.resource('posts', {only: 'show', resource: Post}, function () {
             this.member.get('/publish');
             this.member.post('/publish');
             this.member.put('/publish');
@@ -168,15 +169,21 @@ describe('Mapper', function () {
         });
 
         HTTP_VERBS.forEach(function (VERB) {
-          expect(routes[VERB].methods[VERB]).to.be.true;
+          var route = routes[VERB];
+          var routeClass = route.stack[0].handle.route;
+          expect(routeClass.collectionName).to.eq('posts');
+          expect(routeClass.resourceName).to.eq('post');
+          expect(routeClass.resource).to.eql(Post);
+          expect(route.methods[VERB]).to.be.true;
         });
       });
     });
 
     describe('resources.collection', function () {
+      var Post = {find: 'find'};
       var router = mapRoutes(function () {
         this.resource('users', {only: 'show'}, function () {
-          this.resource('posts', {only: 'show'}, function () {
+          this.resource('posts', {only: 'show', resource: Post}, function () {
             this.collection.get('/publish');
             this.collection.post('/publish');
             this.collection.put('/publish');
@@ -194,7 +201,12 @@ describe('Mapper', function () {
         });
 
         HTTP_VERBS.forEach(function (VERB) {
-          expect(routes[VERB].methods[VERB]).to.be.true;
+          var route = routes[VERB];
+          var routeClass = route.stack[0].handle.route;
+          expect(routeClass.collectionName).to.eq('posts');
+          expect(routeClass.resourceName).to.eq('post');
+          expect(routeClass.resource).to.eql(Post);
+          expect(route.methods[VERB]).to.be.true;
         });
       });
     });
