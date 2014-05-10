@@ -2,7 +2,7 @@
   "name": "project-router",
   "description": "Promise based routing for Express apps",
   "repository": "git@github.com:moudy/project-router.git",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "test": "mocha"
   },
