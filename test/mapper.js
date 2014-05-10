@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var expect = require('chai').expect;
 var express = require('express');
+var HTTP_VERBS = require('../lib/http-verbs');
 
 var Mapper = require('../lib/mapper');
 
@@ -140,19 +141,35 @@ describe('Mapper', function () {
 
     });
 
+    function findRoute(stack, path, verb) {
+      return _.find(stack, function (s) {
+        return s.route.path === path && s.route.methods[verb];
+      }).route;
+    }
+
     describe('resources.member', function () {
       var router = mapRoutes(function () {
         this.resource('users', {only: 'show'}, function () {
           this.resource('posts', {only: 'show'}, function () {
-            this.member.get('/wtf');
+            this.member.get('/publish');
+            this.member.post('/publish');
+            this.member.put('/publish');
+            this.member.delete('/publish');
           });
         });
       });
 
       it('sets a member route', function () {
-        var routes = router.stack.map(function (s) { return s.route.path; });
-        var expected = '/users/:userId/posts/:id/wtf';
-        expect(routes).to.include.members([ expected ]);
+        var expected = '/users/:userId/posts/:id/publish';
+        var stack = router.stack;
+        var routes = {};
+        HTTP_VERBS.forEach(function (VERB) {
+          routes[VERB] = findRoute(stack, expected, VERB);
+        });
+
+        HTTP_VERBS.forEach(function (VERB) {
+          expect(routes[VERB].methods[VERB]).to.be.true;
+        });
       });
     });
 
@@ -160,15 +177,25 @@ describe('Mapper', function () {
       var router = mapRoutes(function () {
         this.resource('users', {only: 'show'}, function () {
           this.resource('posts', {only: 'show'}, function () {
-            this.collection.get('/wtf');
+            this.collection.get('/publish');
+            this.collection.post('/publish');
+            this.collection.put('/publish');
+            this.collection.delete('/publish');
           });
         });
       });
 
       it('sets a collection route route', function () {
-        var routes = router.stack.map(function (s) { return s.route.path; });
-        var expected = '/users/:userId/posts/wtf';
-        expect(routes).to.include.members([ expected ]);
+        var expected = '/users/:userId/posts/publish';
+        var stack = router.stack;
+        var routes = {};
+        HTTP_VERBS.forEach(function (VERB) {
+          routes[VERB] = findRoute(stack, expected, VERB);
+        });
+
+        HTTP_VERBS.forEach(function (VERB) {
+          expect(routes[VERB].methods[VERB]).to.be.true;
+        });
       });
     });
 
