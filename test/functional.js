@@ -13,6 +13,11 @@ var router = projectRouter.map(function () {
   this.post('/users', 'users/index');
   this.put('/users', 'users/index');
   this.delete('/users', 'users/index');
+
+  this.namespace('dashboard', function () {
+    this.get('/users', 'users/index');
+    this.resource('comments', {only: 'index'});
+  });
 });
 
 app.use(router);
@@ -31,5 +36,7 @@ describe('request/response', function () {
   it('renders users/index', test('post', '/users', 'users/index'));
   it('renders users/index', test('put', '/users', 'users/index'));
   it('renders users/index', test('del', '/users', 'users/index'));
+  it('renders dashboard/users/index', test('get', '/dashboard/users', 'dashboard/users/index'));
+  it('renders dashboard/comments/index', test('get', '/dashboard/comments', 'dashboard/comments/index'));
 
 });
