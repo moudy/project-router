@@ -171,8 +171,7 @@ describe('Mapper', function () {
         HTTP_VERBS.forEach(function (VERB) {
           var route = routes[VERB];
           var routeClass = route.stack[0].handle.route;
-          expect(routeClass.collectionName).to.eq('posts');
-          expect(routeClass.resourceName).to.eq('post');
+          expect(routeClass.resourceName).to.eq('posts');
           expect(routeClass.resource).to.eql(Post);
           expect(route.methods[VERB]).to.be.true;
         });
@@ -203,8 +202,7 @@ describe('Mapper', function () {
         HTTP_VERBS.forEach(function (VERB) {
           var route = routes[VERB];
           var routeClass = route.stack[0].handle.route;
-          expect(routeClass.collectionName).to.eq('posts');
-          expect(routeClass.resourceName).to.eq('post');
+          expect(routeClass.resourceName).to.eq('posts');
           expect(routeClass.resource).to.eql(Post);
           expect(route.methods[VERB]).to.be.true;
         });
