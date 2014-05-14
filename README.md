@@ -7,6 +7,11 @@ Promise based routing for Express apps. There are 2 parts to this library.
 1. A map function to define routes and resources - `.map(fn)`
 2. A promises aware `Route` object you can inherit from
 
+### Install
+```
+npm install --save project-router
+```
+
 ### Basic Example
 
 app.js
