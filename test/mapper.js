@@ -65,6 +65,7 @@ describe('Mapper', function () {
     function test (routes, stack, shouldExist)  {
       _.each(routes, function test (routeInfo) {
         var route = _.find(stack, function (s) {
+          //console.log( s.route.path, routeInfo.path , s.route.methods[routeInfo.type], routeInfo.type);
           return s.route.path === routeInfo.path && s.route.methods[routeInfo.type];
         });
 
@@ -198,6 +199,9 @@ describe('Mapper', function () {
         HTTP_VERBS.forEach(function (VERB) {
           routes[VERB] = findRoute(stack, expected, VERB);
         });
+
+        var paths = stack.map(function (s) { return s.route.path; });
+        //expect(paths.indexOf('/users/:userId/posts/publish')).to.be.below(paths.indexOf('/users/:userId/posts/:id'));
 
         HTTP_VERBS.forEach(function (VERB) {
           var route = routes[VERB];
