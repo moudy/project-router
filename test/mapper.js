@@ -153,6 +153,7 @@ describe('Mapper', function () {
       var Post = {find: 'find'};
       var router = mapRoutes(function () {
         this.resource('users', {only: 'show'}, function () {
+          this.member.put('/publish');
           this.resource('posts', {only: 'show', resource: Post}, function () {
             this.member.get('/publish');
             this.member.post('/publish');
