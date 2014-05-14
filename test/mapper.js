@@ -136,6 +136,7 @@ describe('Mapper', function () {
           '/users/:userId/posts/:postId/comments',
           '/users/:userId/posts/:postId/comments/:id',
           '/users/:userId/posts/:postId/comments/:id/edit',
+          '/users/:userId/posts/:postId/comments/:id',
           '/users/:userId/posts/:postId/comments/:id'
          ]);
       });
@@ -201,7 +202,7 @@ describe('Mapper', function () {
         });
 
         var paths = stack.map(function (s) { return s.route.path; });
-        //expect(paths.indexOf('/users/:userId/posts/publish')).to.be.below(paths.indexOf('/users/:userId/posts/:id'));
+        expect(paths.indexOf('/users/:userId/posts/publish')).to.be.below(paths.indexOf('/users/:userId/posts/:id'));
 
         HTTP_VERBS.forEach(function (VERB) {
           var route = routes[VERB];
