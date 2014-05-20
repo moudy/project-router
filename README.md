@@ -7,6 +7,16 @@ Promise based routing for Express apps. There are 2 parts to this library.
 1. A map function to define routes and resources - `.map(fn)`
 2. A promises aware `Route` object you can inherit from
 
+### Motivation
+Most request/response cycles of a web apps follow the same pattern.
+
+- run some code based on a URL
+- reject or redirect based on autherization/authentication
+- create, read, update, delete data (aka CRUD)
+- present data back to the client
+
+I wanted to abstract the logic of mapping paths to files and have ways to hook into the request/response lifeclyce as needed. Instead of having controller objects that manage a group of URLs I found it more managable to have one object per URL (i.e. `UsersShowRoute`). If no route object exists it will render the corresponding view.
+
 ### Install
 ```
 npm install --save project-router
