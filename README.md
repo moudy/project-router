@@ -20,6 +20,8 @@ app.js
 var app = require('express')();
 var projectRouter = require('project-router');
 
+// Map paths to route objects
+// returns an instance of `express.Router()`
 var router = projectRouter.map(function () {
   this.get('/', 'pages/index');
 });
@@ -33,21 +35,22 @@ app/routes/pages/index.js
 var inherits = require('util').inherits;
 var projectRouter = require('project-router');
 
+// Extend from the base `Route` object
 function PagesIndexRoute () {}
 inherits(PagesIndexRoute, projectRouter.Route);
 
 module.exports = PagesIndexRoute;
 
-var p = PagesIndexRoute.prototype;
-
-p.model = function () {
+// Define a model hook (this can return a value directly or a promise)
+PagesIndexRoute.prototype.model = function () {
   return User.findOne().exec();
 };
 ```
 
-app/views/pages/index.hbs
+app/views/pages/index.hbs  
 ```html
 <p>
+  The data return (or resolved) from the model hook is now available in the view.
   {{username}}
 </p>
 ```
