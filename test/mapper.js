@@ -60,6 +60,22 @@ describe('Mapper', function () {
     });
   });
 
+  describe('.namespace().namespace()', function () {
+    var router = mapRoutes(function () {
+      this.namespace('api', function () {
+        this.namespace('admin', function () {
+          this.get('/users', 'users/index');
+        });
+      });
+    });
+
+    it('routes', function () {
+      var route = router.stack[0].route;
+      expect(route.path).to.eq('/api/admin/users');
+      expect(route.methods.get).to.be.true;
+    });
+  });
+
   context('.resource()', function () {
 
     function test (routes, stack, shouldExist)  {
@@ -216,7 +232,5 @@ describe('Mapper', function () {
     });
 
   });
-
-
 
 });
