@@ -65,6 +65,11 @@ app/views/pages/index.hbs
 </p>
 ```
 
+### Seeing the routes
+Use [Project Router Viewer](https://github.com/moudy/project-router-viewer) to see a list of routes.
+
+![Project Router Viewer Screenshot](https://raw.githubusercontent.com/moudy/project-router-viewer/screenshot/screenshot.png)
+
 ### Extending the Route object
 Route objects are what handle incoming requests. There are a few request/response lifecycle hooks you can define. This pattern was heavily inspired by the [Ember Router](http://emberjs.com/guides/routing/asynchronous-routing/).
 
