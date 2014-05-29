@@ -10,8 +10,8 @@
     "express": "4.x"
   },
   "dependencies": {
-    "rsvp": "^3.0.6",
-    "lingo": "0.0.5"
+    "i": "^0.3.2",
+    "rsvp": "^3.0.6"
   },
   "devDependencies": {
     "chai": "^1.9.1",
