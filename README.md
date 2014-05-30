@@ -140,42 +140,40 @@ The name of the resource (if defined). `this.resource('users')` would be `users`
 
 ```js
 
-var inherits = require('util').inherits;
 var Route = require('project-router').Route;
 
-// Inherit from base route
-function UsersShowRoute () {}
-inherits(UsersIndex, Route);
-module.exports = UsersShowRoute;
+module.exports = Route.extend({
 
-// Authorize request
-UsersShowRoute.prototype.enter = function () {
-  if (!this.request.isAdmin()) this.reject(401, 'Unauthorized');
-};
+  // Authorize request
+  enter: function () {
+    if (!this.request.isAdmin()) this.reject(401, 'Unauthorized');
+  },
 
-// Some special async admin authorization
-UsersIndexRoute.prototype.beforeModel = function () {
-  return new RSVP.Promise(function(resolve, reject) {
-    AdminAuth.canAccess('users', function (canAccess) {
-      canAccess ? resolve() : reject ();
+  // Some special async admin authorization
+  beforeModel: function () {
+    return new RSVP.Promise(function(resolve, reject) {
+      AdminAuth.canAccess('users', function (canAccess) {
+        canAccess ? resolve() : reject ();
+      });
     });
-  });
-};
+  },
 
-// Get list of users (assuming this.resource is mongoose model)
-UsersShowsRoute.prototype.model = function () {
-  return this.resource.findById(this.param('id')).exec();
-};
+  // Get list of users (assuming this.resource is mongoose model)
+  model: function () {
+    return this.resource.findById(this.param('id')).exec();
+  },
 
-// 404 if model wasn't found
-UsersIndexRoute.prototype.afterModel = function (model) {
-  if (!model) this.reject(404, 'Not found');
-};
+  // 404 if model wasn't found
+  afterModel: function (model) {
+    if (!model) this.reject(404, 'Not found');
+  },
 
-// Namespace response
-UsersIndexRoute.prototype.responseData = function (model) {
-  return { user: model.toJSON() };
-};
+  // Namespace response
+  responseData: function (model) {
+    return { user: model.toJSON() };
+  }
+
+});
 
 ```
 
