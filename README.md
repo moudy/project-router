@@ -42,19 +42,15 @@ app.use(router);
 app/routes/pages/index.js
 
 ```js
-var inherits = require('util').inherits;
-var projectRouter = require('project-router');
+var Route = require('project-router').Route;
 
 // Extend from the base `Route` object
-function PagesIndexRoute () {}
-inherits(PagesIndexRoute, projectRouter.Route);
+var PagesIndexRoute = Route.extend({
+  // Define a model hook (this can return a value directly or a promise)
+  model: function () { return User.findOne().exec(); }
+});
 
 module.exports = PagesIndexRoute;
-
-// Define a model hook (this can return a value directly or a promise)
-PagesIndexRoute.prototype.model = function () {
-  return User.findOne().exec();
-};
 ```
 
 app/views/pages/index.hbs  

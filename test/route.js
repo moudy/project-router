@@ -1,4 +1,3 @@
-var inherits = require('util').inherits;
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
@@ -38,10 +37,10 @@ describe('Route', function () {
   });
 
   context('resolvedModel', function () {
-    function UserRoute () {}
-    inherits(UserRoute, Route);
     var user = {name: 'foo'};
-    UserRoute.prototype.model = function () { return user; };
+    var UserRoute = Route.extend({
+      model: function () { return user; }
+    });
 
     describe('afterModel', function () {
       var route = new UserRoute();
